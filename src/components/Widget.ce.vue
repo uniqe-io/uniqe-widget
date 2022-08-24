@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+import Uniqe from './logo/uniqe.svg';
 import Twitter from './logo/twitter.svg';
 import Reddit from './logo/reddit.svg';
-import Uniqe from './logo/uniqe.svg';
 
 import { fetchUniqeProofNFTs } from "./graphql/index";
 
-
 const { address } = defineProps<{
   address: string;
-}>()
+}>();
 
 const uniqeUrl = import.meta.env.VITE_UNIQE_URL as string;
 
@@ -24,27 +23,31 @@ async function fetchNetworks() {
   networks.value = await fetchUniqeProofNFTs(address);
 }
 
-function openNetwork() {
-
+function getImageFromValidator(val: string): string {
+  switch (val) {
+    case 'Twitter':
+      return Twitter;
+    case 'Reddit':
+      return Reddit;
+    case 'Uniqe':
+      return Uniqe;
+    default:
+      return "#";
+  }
 }
 
-fetchNetworks()
+function openNetwork(url: string) {
+  window.open(url, '_blank').focus();
+}
 
+fetchNetworks();
 </script>
 
 <template>
   <div class="widget">
-    <div class="icon">
-      <div class="tooltip-anchor"><div class="bubble">Twitter</div></div>
-      <img :src="Twitter" />
-    </div>
-    <div class="icon">
-      <div class="tooltip-anchor"><div class="bubble">Reddit</div></div>
-      <img :src="Reddit" />
-    </div>
-    <div v-for="network in networks" class="icon">
+    <div v-for="network in networks" class="icon" @click="openNetwork(network.url)">
       <div class="tooltip-anchor"><div class="bubble">{{ network.name }}</div></div>
-      <img :src="Reddit" />
+      <img :src="getImageFromValidator(network.validator)" />
     </div>
     <div class="divider"></div>
     <div class="wallet" @click="openUniqeAddress">

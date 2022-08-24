@@ -9,6 +9,7 @@ export interface Network {
     handle: string;
     url: string;
     id: BN;
+    validator: string;
     name: string;
 }
 

@@ -21,9 +21,7 @@ interface UniqeProof {
 }
 
 interface UNIQResponse {
-
   uniqeProofs: UniqeProof[];
-
 }
 
 function proofToNetwork(proof: UniqeProof): Network {
@@ -32,6 +30,7 @@ function proofToNetwork(proof: UniqeProof): Network {
 
   const handle = tokenMetadata.attributes.filter(e => e.trait_type === "handle")[0].value;
   const url = tokenMetadata.attributes.filter(e => e.trait_type === "url")[0].value;
+  const validator = tokenMetadata.attributes.filter(e => e.trait_type === "validator")[0].value as string;
   const proxiedIcon = `${import.meta.env.VITE_IPFS_GATEWAY}${tokenMetadata.image}`;
 
   return {
@@ -40,6 +39,7 @@ function proofToNetwork(proof: UniqeProof): Network {
       icon: proxiedIcon,
       url,
       handle,
+      validator,
   };
 }
 
@@ -56,7 +56,16 @@ export async function fetchUniqeProofNFTs(nameOrAddress: string): Promise<Networ
   `;
 
   const addr = await resolveNameOrAddress(url, nameOrAddress);
-  const { uniqeProofs } = await queryGraphQl<UNIQResponse>(url, query, { addr })
+  const { uniqeProofs } = await queryGraphQl<UNIQResponse>(url, query, { addr });
 
-  return uniqeProofs.map(proofToNetwork);
+  let networks: Network[] = [];
+  for (const proof of uniqeProofs) {
+    try {
+      networks.push(proofToNetwork(proof));
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  return networks;
 }
