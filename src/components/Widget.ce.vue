@@ -46,7 +46,7 @@ fetchNetworks();
 <template>
   <div class="widget">
     <div v-for="network in networks" class="icon" @click="openNetwork(network.url)">
-      <div class="tooltip-anchor"><div class="bubble">{{ network.name }}</div></div>
+      <div class="tooltip-anchor"><div class="bubble">View on {{ network.validator }}</div></div>
       <img :src="getImageFromValidator(network.validator)" />
     </div>
     <div class="divider"></div>
