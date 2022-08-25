@@ -96,6 +96,9 @@ $spacing: 10px
 
   background-color: $not_selected
 
+  .tooltip-anchor
+    pointer-events: none
+
   // On hover
   &:hover
     box-shadow: 0 5px 10px rgba(0,0,0,0.25), 0 5px 8px rgba(0,0,0,0.24)
@@ -192,6 +195,9 @@ $spacing: 10px
     justify-content: center
     transition: all 0.3s cubic-bezier(.25,.8,.25,1)
     filter: $not_selected_filter
+
+  .tooltip-anchor
+    pointer-events: none
 
   // On hover
   &:hover
