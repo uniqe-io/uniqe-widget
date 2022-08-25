@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import Uniqe from './logo/uniqe.svg';
-import Twitter from './logo/twitter.svg';
-import Reddit from './logo/reddit.svg';
+import Uniqe from './logo/uniqe.svg?raw';
+import Twitter from './logo/twitter.svg?raw';
+import Reddit from './logo/reddit.svg?raw';
 
 import { fetchUniqeProofNFTs } from "./graphql/index";
+import type { Network } from "./graphql/index";
 
 const { address } = defineProps<{
   address: string;
@@ -14,10 +15,10 @@ const { address } = defineProps<{
 const uniqeUrl = import.meta.env.VITE_UNIQE_URL as string;
 
 function openUniqeAddress() {
-  window.open(`${uniqeUrl}${address}`, '_blank').focus();
+  window.open(`${uniqeUrl}${address}`, '_blank')?.focus();
 }
 
-const networks = ref([]);
+const networks = ref([] as Network[]);
 
 async function fetchNetworks() {
   networks.value = await fetchUniqeProofNFTs(address);
@@ -37,7 +38,7 @@ function getImageFromValidator(val: string): string {
 }
 
 function openNetwork(url: string) {
-  window.open(url, '_blank').focus();
+  window.open(url, '_blank')?.focus();
 }
 
 fetchNetworks();
