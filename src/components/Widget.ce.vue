@@ -24,14 +24,16 @@ async function fetchNetworks() {
   networks.value = await fetchUniqeProofNFTs(address);
 }
 
+function rawToBase64url(raw: string) {
+  return `data:image/svg+xml;base64,${btoa(raw)}`;
+}
+
 function getImageFromValidator(val: string): string {
   switch (val) {
     case 'Twitter':
-      return Twitter;
+      return rawToBase64url(Twitter);
     case 'Reddit':
-      return Reddit;
-    case 'Uniqe':
-      return Uniqe;
+      return rawToBase64url(Reddit);
     default:
       return "#";
   }
@@ -54,7 +56,7 @@ fetchNetworks();
     <div class="wallet" @click="openUniqeAddress">
       <div class="wallet-icon">
         <div class="tooltip-anchor"><div class="bubble">View on Uniqe</div></div>
-        <img :src="Uniqe" />
+        <img :src="rawToBase64url(Uniqe)" />
       </div>
       <div class="wallet-address">0x{{ address.slice(2, 10).toUpperCase() }}</div>
     </div>
