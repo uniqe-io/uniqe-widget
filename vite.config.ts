@@ -10,5 +10,18 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  }
+  },
+  ...(process.env.NODE_ENV === 'production' ? {
+    build: {
+      rollupOptions: {
+        input: './src/main.ts',
+        output: {
+          manualChunks: () => "app",
+          entryFileNames: `[name].js`,
+          chunkFileNames: `[name].js`,
+          assetFileNames: `[name].[ext]`,
+        },
+      },
+    },
+  } : {}),
 })
