@@ -1,6 +1,23 @@
 # uniqe-widget
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a web-component that allows you to display Uniqe NFT Proof for a web3 user on your website.
+
+![](./images/screenshot.png)
+
+## Usage
+
+- [ ] TODO: Add npm package installation/cdn
+
+```html
+<html>
+  <head>
+    <script src="./dist/main.js"></script> <!-- Include the minified js file -->
+  </head>
+  <body>
+    <uniqe-widget address="0x..."></uniqe-widget>
+  </body>
+</html>
+```
 
 ## Recommended IDE Setup
 
@@ -19,11 +36,10 @@ If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has a
 
 ## Customize configuration
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
 ## Project Setup
 
 ```sh
+cp .env.example .env
 npm install
 ```
 
