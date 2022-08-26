@@ -6,8 +6,6 @@ This is a web-component that allows you to display Uniqe NFT Proof for a web3 us
 
 ## Usage
 
-- [ ] TODO: Add npm package installation/cdn
-
 ```html
 <html>
   <head>
