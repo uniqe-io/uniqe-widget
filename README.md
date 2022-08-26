@@ -1,4 +1,4 @@
-# uniqe-widget
+# uniqe-widget ![npm publish](https://github.com/uniqe-io/uniqe-widget/actions/workflows/npm-publish.yml/badge.svg) [![npm version](https://badge.fury.io/js/uniqe-widget.svg)](https://badge.fury.io/js/uniqe-widget)
 
 This is a web-component that allows you to display Uniqe NFT Proof for a web3 user on your website.
 
