@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import Uniqe from './logo/uniqe.svg?raw';
-import Twitter from './logo/twitter.svg?raw';
-import Reddit from './logo/reddit.svg?raw';
+import Uniqe from './logo/uniqe.vue';
+import Twitter from './logo/twitter.vue';
+import Reddit from './logo/reddit.vue';
 
 import { fetchUniqeProofNFTs } from "./graphql/index";
 import type { Network } from "./graphql/index";
@@ -24,18 +24,14 @@ async function fetchNetworks() {
   networks.value = await fetchUniqeProofNFTs(address);
 }
 
-function rawToBase64url(raw: string) {
-  return `data:image/svg+xml;base64,${btoa(raw)}`;
-}
-
-function getImageFromValidator(val: string): string {
+function getComponentFromValidator(val: string): string {
   switch (val) {
     case 'Twitter':
-      return rawToBase64url(Twitter);
+      return Twitter;
     case 'Reddit':
-      return rawToBase64url(Reddit);
+      return Reddit;
     default:
-      return "#";
+      return "";
   }
 }
 
@@ -50,13 +46,17 @@ fetchNetworks();
   <div class="widget">
     <div v-for="network in networks" class="icon" @click="openNetwork(network.url)">
       <div class="tooltip-anchor"><div class="bubble">View on {{ network.validator }}</div></div>
-      <img :src="getImageFromValidator(network.validator)" />
+      <div class="img-container">
+        <component :is="getComponentFromValidator(network.validator)" />
+      </div>
     </div>
     <div class="divider"></div>
     <div class="wallet" @click="openUniqeAddress">
       <div class="wallet-icon">
         <div class="tooltip-anchor"><div class="bubble">View on Uniqe</div></div>
-        <img :src="rawToBase64url(Uniqe)" />
+        <div class="img-container">
+          <Uniqe />
+        </div>
       </div>
       <div class="wallet-address">0x{{ address.slice(2, 10).toUpperCase() }}</div>
     </div>
@@ -67,8 +67,8 @@ fetchNetworks();
 $not_selected: #FAFAFA
 $selected: #4C3EF4
 
-$selected_filter: invert(100%) sepia(0%) saturate(7479%) hue-rotate(108deg) brightness(99%) contrast(99%)
-$not_selected_filter: invert(27%) sepia(79%) saturate(6425%) hue-rotate(244deg) brightness(97%) contrast(98%)
+$selected_icon: $not_selected
+$not_selected_icon: $selected
 
 $spacing: 10px
 
@@ -105,14 +105,15 @@ $spacing: 10px
     background-color: $selected
 
     .wallet-icon
-      img
-        filter: $selected_filter
+      .img-container
+        svg
+          color: $selected_icon
 
     .tooltip-anchor
       opacity: 1
 
     .wallet-address
-      color: $not_selected
+      color: $selected_icon
 
   .wallet-icon
     padding: 10px
@@ -121,11 +122,12 @@ $spacing: 10px
 
     transition: all 0.3s cubic-bezier(.25,.8,.25,1)
 
-    img
+    .img-container
       display: flex
       justify-content: center
       transition: all 0.3s cubic-bezier(.25,.8,.25,1)
-      filter: $not_selected_filter
+      svg
+        color: $not_selected_icon
 
   .wallet-address
     display: inline-flex
@@ -190,11 +192,13 @@ $spacing: 10px
   background-color: $not_selected
 
 
-  img
+  .img-container
     display: flex
     justify-content: center
     transition: all 0.3s cubic-bezier(.25,.8,.25,1)
-    filter: $not_selected_filter
+
+    svg
+      color: $not_selected_icon
 
   .tooltip-anchor
     pointer-events: none
@@ -207,8 +211,8 @@ $spacing: 10px
     .tooltip-anchor
       opacity: 1
 
-    img
-      filter: $selected_filter
+    .img-container
+      svg
+        color: $selected_icon
 
-//.wallet
 </style>
