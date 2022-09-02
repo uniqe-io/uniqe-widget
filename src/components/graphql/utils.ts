@@ -1,16 +1,19 @@
-import type BN from "bn.js";
-
 export interface TheGraphResponse<T> {
   data: T;
 }
 
 export interface Network {
-    icon: string;
-    handle: string;
     url: string;
-    id: BN;
     validator: string;
-    name: string;
+}
+
+export async function displayAddress(walletOrName: string): Promise<string> {
+    if (new RegExp("^0x[A-f0-9]{40}$").test(walletOrName)) {
+        return walletOrName;
+    }
+
+    return walletOrName;
+
 }
 
 export async function queryGraphQl<T>(uri: string, query: string, variables: { [name: string]: any }): Promise<T> {

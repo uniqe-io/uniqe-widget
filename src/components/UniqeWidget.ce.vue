@@ -4,8 +4,9 @@ import { ref } from "vue";
 import Uniqe from './logo/uniqe.vue';
 import Twitter from './logo/twitter.vue';
 import Reddit from './logo/reddit.vue';
+import Lens from './logo/lens.vue';
 
-import { fetchUniqeProofNFTs } from "./graphql/index";
+import { fetchNetworks, resolveAnyToName, resolveAnyToAddress } from "./graphql/index";
 import type { Network } from "./graphql/index";
 
 const { address } = defineProps<{
@@ -14,15 +15,14 @@ const { address } = defineProps<{
 
 const uniqeUrl = import.meta.env.VITE_UNIQE_URL as string;
 
+const resolvedAddress = ref("");
+
 function openUniqeAddress() {
   window.open(`${uniqeUrl}${address}`, '_blank')?.focus();
 }
 
 const networks = ref([] as Network[]);
 
-async function fetchNetworks() {
-  networks.value = await fetchUniqeProofNFTs(address);
-}
 
 function getComponentFromValidator(val: string): string {
   switch (val) {
@@ -30,6 +30,8 @@ function getComponentFromValidator(val: string): string {
       return Twitter;
     case 'Reddit':
       return Reddit;
+    case "Lens":
+      return Lens;
     default:
       return "";
   }
@@ -39,7 +41,13 @@ function openNetwork(url: string) {
   window.open(url, '_blank')?.focus();
 }
 
-fetchNetworks();
+async function fetchData() {
+  let addr = await resolveAnyToAddress(address);
+  networks.value = await fetchNetworks(addr);
+  resolvedAddress.value = await resolveAnyToName(address);
+}
+
+fetchData();
 </script>
 
 <template>
@@ -58,7 +66,7 @@ fetchNetworks();
           <Uniqe />
         </div>
       </div>
-      <div class="wallet-address">0x{{ address.slice(2, 10).toUpperCase() }}</div>
+      <div class="wallet-address">{{ resolvedAddress }}</div>
     </div>
   </div>
 </template>
