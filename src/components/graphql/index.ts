@@ -1,7 +1,9 @@
 import { fetchLensProfiles } from "./lens";
 import { fetchUniqeProofNFTs } from "./uniqe";
-export { resolveAnyToName, resolveAnyToAddress } from "./ens";
 import type { Network } from "./utils";
+
+export { resolveAnyToName, resolveAnyToAddress } from "./ens";
+export { fetchLensHandle} from "./lens";
 
 export async function fetchNetworks(address: string): Promise<Network[]> {
   let nfts = await fetchUniqeProofNFTs(address);

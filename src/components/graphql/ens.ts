@@ -1,5 +1,5 @@
 import { queryGraphQl } from "./utils";
-import { lookupLensName } from "./lens";
+import { fetchLensHandle, lookupLensName } from "./lens";
 
 interface Domain {
   name: string;
@@ -39,7 +39,13 @@ export async function resolveAnyToAddress(addr: string): Promise<string> {
 
 export async function resolveAnyToName(addr: string): Promise<string> {
   if (new RegExp("^0x[A-f0-9]{40}$").test(addr)) {
+    try {
       return await reverseLookupAddress(addr);
+    } catch (e) {
+      try {
+        return await fetchLensHandle(addr);
+      } catch (e) {}
+    }
   }
 
   if (addr.endsWith(".eth")) {
@@ -67,7 +73,7 @@ async function reverseLookupAddress(addr: string): Promise<string> {
   const data = await queryGraphQl<ENSResponseLookupAddress>(import.meta.env.VITE_ENS_GRAPHQL_URL as string, query, { addr: addr.toLocaleLowerCase() });
   let res = data?.accounts[0]?.domains[0]?.name;
 
-  if (res === null) {
+  if (res === undefined) {
       throw new Error(`Unable to resolve address: ${addr}`);
   }
 
@@ -87,7 +93,7 @@ async function lookupName(name: string): Promise<string> {
 
   const data = await queryGraphQl<ENSResponseLookupName>(import.meta.env.VITE_ENS_GRAPHQL_URL as string, query, { name: name.toLocaleLowerCase() });
   let res = data?.domains[0]?.resolvedAddress?.id;
-  if (res === null) {
+  if (res === undefined) {
       throw new Error(`Unable to resolve name: ${name}`);
   }
 

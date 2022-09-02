@@ -21,6 +21,28 @@ export function lensToNetwork(profile: LensProfile): Network {
     };
 }
 
+export async function fetchLensHandle(address: string): Promise<string> {
+  const query = `
+      query($address: [EthereumAddress!]) {
+          profiles(request:{ownedBy: $address}) {
+              items {
+                handle
+              }
+          }
+      }
+  `;
+
+  const { profiles } = await queryGraphQl<LensProfilesResponse>(import.meta.env.VITE_LENS_GRAPHQL_URL, query, { address: [address] });
+
+  let  res = profiles?.items?.map(x => x.handle)[0];
+
+  if (res === undefined) {
+      throw new Error(`Unable to fetch lens profile: ${address}`);
+  }
+
+  return res;
+}
+
 export async function fetchLensProfiles(address: string): Promise<Network[]> {
     const query = `
         query($address: [EthereumAddress!]) {
@@ -36,7 +58,7 @@ export async function fetchLensProfiles(address: string): Promise<Network[]> {
 
     let  res = profiles?.items?.map(lensToNetwork);
 
-    if (res === null) {
+    if (res === undefined) {
         throw new Error(`Unable to fetch lens profile: ${address}`);
     }
 
@@ -54,12 +76,13 @@ export async function lookupLensName(handle: string): Promise<string> {
         }
       }
   `;
+  console.log(handle)
 
   const { profiles } = await queryGraphQl<LensProfilesResponse>(import.meta.env.VITE_LENS_GRAPHQL_URL, query, { handles: [handle] });
 
   let res = profiles?.items[0]?.ownedBy;
 
-  if (res === null) {
+  if (res === undefined) {
       throw new Error(`Unable to resolve lens name: ${handle}`);
   }
 
