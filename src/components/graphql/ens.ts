@@ -64,7 +64,7 @@ async function reverseLookupAddress(addr: string): Promise<string> {
   }
   `;
 
-  const data = await queryGraphQl<ENSResponseLookupAddress>(import.meta.env.VITE_ENS_GRAPHQL_URL as string, query, { addr });
+  const data = await queryGraphQl<ENSResponseLookupAddress>(import.meta.env.VITE_ENS_GRAPHQL_URL as string, query, { addr: addr.toLocaleLowerCase() });
   let res = data?.accounts[0]?.domains[0]?.name;
 
   if (res === null) {
