@@ -28,6 +28,12 @@ jobs:
           node-version: 16
           registry-url: https://registry.npmjs.org/
       - run: npm ci
+      - run: echo "NODE_ENV=production" >> .env
+      - run: echo "VITE_UNIQE_URL=http://app.uniqe.io/profile/" >> .env
+      - run: echo "VITE_UNIQE_GRAPHQL_URL=https://api.thegraph.com/subgraphs/name/uniqe-dao/uniqe" >> .env
+      - run: echo "VITE_ENS_GRAPHQL_URL=https://api.thegraph.com/subgraphs/name/ensdomains/ens" >> .env
+      - run: echo "VITE_LENS_GRAPHQL_URL=https://api.lens.dev/" >> .env
+      - run: echo "VITE_IPFS_GATEWAY=https://ipfs.io/ipfs/" >> .env
       - run: npx vite build --mode production
       - run: npm publish
         env:
