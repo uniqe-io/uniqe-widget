@@ -10,7 +10,7 @@ This is a web-component that allows you to display Uniqe NFT Proof for a web3 us
 <html>
   <head>
     <!-- Include the minified js file, replace the <VERSION> tag with the current one -->
-    <script src="https://unpkg.com/browse/uniqe-widget@<VERIONS>/dist/main.js"></script>
+    <script src="https://unpkg.com/uniqe-widget@<VERSION>/dist/main.js"></script>
   </head>
   <body>
     <!-- Just include the wallet address of the user and you're set ! -->
