@@ -15,7 +15,15 @@ const { address } = defineProps<{
 
 const uniqeUrl = import.meta.env.VITE_UNIQE_URL as string;
 
-const resolvedAddress = ref("");
+const resolveToShortened = (address: string) => {
+  if (new RegExp("^0x[A-f0-9]{40}$").test(address)) {
+      return address.slice(0, 6) + "..." + address.slice(-4)
+  }
+
+  return address;
+};
+
+const resolvedAddress = ref(resolveToShortened(address));
 
 function openUniqeAddress() {
   window.open(`${uniqeUrl}${address}`, '_blank')?.focus();
@@ -79,6 +87,7 @@ $selected_icon: $not_selected
 $not_selected_icon: $selected
 
 $spacing: 10px
+$totaly-sane-value: 10000px
 
 .widget
   font-family: "Noto Sans", sans-serif
@@ -100,7 +109,7 @@ $spacing: 10px
 .wallet
   cursor: pointer
   display: inline-flex
-  border-radius: calc($spacing * 2)
+  border-radius: $totaly-sane-value
 
   background-color: $not_selected
 
@@ -126,8 +135,6 @@ $spacing: 10px
   .wallet-icon
     padding: 10px
 
-    border-radius: calc($spacing * 2) 0 0 calc($spacing * 2)
-
     transition: all 0.3s cubic-bezier(.25,.8,.25,1)
 
     .img-container
@@ -150,8 +157,6 @@ $spacing: 10px
     padding-left: 0px
 
     transition: all 0.3s cubic-bezier(.25,.8,.25,1)
-
-    border-radius: 0 calc($spacing * 2) calc($spacing * 2) 0
 
 .tooltip-anchor
   position: relative
