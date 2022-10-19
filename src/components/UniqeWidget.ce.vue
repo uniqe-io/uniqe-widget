@@ -31,7 +31,6 @@ function openUniqeAddress() {
 
 const networks = ref([] as Network[]);
 
-
 function getComponentFromValidator(val: string): string {
   switch (val) {
     case 'Twitter':
