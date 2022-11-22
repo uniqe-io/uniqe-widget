@@ -5,6 +5,7 @@ import Uniqe from './logo/uniqe.vue';
 import Twitter from './logo/twitter.vue';
 import Reddit from './logo/reddit.vue';
 import Lens from './logo/lens.vue';
+import Github from './logo/github.vue';
 
 import { fetchNetworks, resolveAnyToName, resolveAnyToAddress } from "./graphql/index";
 import type { Network } from "./graphql/index";
@@ -37,6 +38,8 @@ function getComponentFromValidator(val: string): string {
       return Twitter;
     case 'Reddit':
       return Reddit;
+    case 'Github':
+      return Github;
     case "Lens":
       return Lens;
     default:
